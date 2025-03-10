@@ -14,6 +14,7 @@
         <RootNamespace>RepoAntiCheat</RootNamespace>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>latest</LangVersion>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     </PropertyGroup>
 
     <!-- Enable Nullable for better IDE null-checking -->
