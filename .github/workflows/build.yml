@@ -33,5 +33,5 @@ jobs:
         with:
           name: build-artifacts
           path: |
-            ./RepoAntiCheat/RepoAntiCheat/bin/Release/netstandard2.1/RepoAntiCheat.dll"
-            ./RepoAntiCheat/RepoAntiCheatPatcher/bin/Release/netstandard2.1/RepoAntiCheatPatcher.dll"
+            RepoAntiCheat/bin/Release/netstandard2.1/RepoAntiCheat.dll"
+            RepoAntiCheatPatcher/bin/Release/netstandard2.1/RepoAntiCheatPatcher.dll"
