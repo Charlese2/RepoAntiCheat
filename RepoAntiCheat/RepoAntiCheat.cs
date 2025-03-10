@@ -1,7 +1,9 @@
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
+using Photon.Pun.UtilityScripts;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace RepoAntiCheat;
 
@@ -10,36 +12,68 @@ public class RepoAntiCheat : BaseUnityPlugin
 {
     public static Dictionary<int, PlayerAvatar> playerActorNrToPlayerAvatarMap = [];
     public static RepoAntiCheat Instance { get; private set; } = null!;
-    internal new static ManualLogSource Logger { get; private set; } = null!;
+    internal static ManualLogSource Log { get; private set; } = null!;
     internal static Harmony? Harmony { get; set; }
+
+    private static void PlayerNumberingChanged()
+    {
+        playerActorNrToPlayerAvatarMap.Clear();
+    }
+
+    public static PlayerAvatar? GetPlayerAvatarFromActorNumber(int actorNumber)
+    {
+        if (!playerActorNrToPlayerAvatarMap.TryGetValue(actorNumber, out PlayerAvatar playerAvatar))
+        {
+            foreach (PlayerAvatar newPlayerAvatar in GameDirector.instance.PlayerList)
+            {
+                if (newPlayerAvatar.photonView.OwnerActorNr == actorNumber)
+                {
+                    playerActorNrToPlayerAvatarMap.Add(actorNumber, newPlayerAvatar);
+                    return newPlayerAvatar;
+                }
+            }
+        }
+
+        return playerAvatar;
+    }
 
     private void Awake()
     {
-        Logger = base.Logger;
+        Log = base.Logger;
         Instance = this;
 
-        Patch();
+        gameObject.hideFlags = HideFlags.HideAndDontSave;
 
-        Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
+        Patch();
+        PlayerNumbering.OnPlayerNumberingChanged += PlayerNumberingChanged;
+
+        Log.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
+    }
+
+    private void Destroy()
+    {
+        PlayerNumbering.OnPlayerNumberingChanged -= PlayerNumberingChanged;
+        Unpatch();
+        Log.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has unloaded!");
     }
 
     internal static void Patch()
     {
         Harmony ??= new Harmony(MyPluginInfo.PLUGIN_GUID);
 
-        Logger.LogDebug("Patching...");
+        Log.LogDebug("Patching...");
 
         Harmony.PatchAll();
 
-        Logger.LogDebug("Finished patching!");
+        Log.LogDebug("Finished patching!");
     }
 
     internal static void Unpatch()
     {
-        Logger.LogDebug("Unpatching...");
+        Log.LogDebug("Unpatching...");
 
         Harmony?.UnpatchSelf();
 
-        Logger.LogDebug("Finished unpatching!");
+        Log.LogDebug("Finished unpatching!");
     }
 }
