@@ -8,7 +8,7 @@ namespace RepoAntiCheat.Patches;
 internal class RPCPatches
 {
     [HarmonyPatch(typeof(PlayerAvatar), nameof(PlayerAvatar.ChatMessageSendRPC))]
-    internal static class ChatMesageSendRpcPatch
+    internal static class ChatMesageSend
     {
         public static bool Prefix(PlayerAvatar __instance, ref string _message, ref PhotonMessageInfo info)
         {
@@ -39,7 +39,7 @@ internal class RPCPatches
     }
 
     [HarmonyPatch(typeof(ExtractionPoint), nameof(ExtractionPoint.HaulGoalSetRPC))]
-    internal static class HaulGoalSetRpcPatch
+    internal static class HaulGoalSet
     {
         public static void Prefix(int value, ref PhotonMessageInfo info)
         {
@@ -56,7 +56,7 @@ internal class RPCPatches
     }
 
     [HarmonyPatch(typeof(RoundDirector), nameof(RoundDirector.ExtractionPointActivateRPC))]
-    internal static class ExtractionPointActivateRpcPatch
+    internal static class ExtractionPointActivate
     {
         public static void Prefix(ref PhotonMessageInfo info)
         {
@@ -74,7 +74,7 @@ internal class RPCPatches
     }
 
     [HarmonyPatch(typeof(PlayerHealth), nameof(PlayerHealth.HurtOtherRPC))]
-    internal static class PlayerHealthHurtOtherRpcPatch
+    internal static class HurtOther
     {
         public static bool Prefix(PlayerHealth __instance, int damage, ref PhotonMessageInfo info)
         {
@@ -103,7 +103,7 @@ internal class RPCPatches
     }
 
     [HarmonyPatch(typeof(PlayerAvatar), nameof(PlayerAvatar.OutroStartRPC))]
-    internal static class PlayerAvatarOutroStartRpcPatch
+    internal static class OutroStart
     {
         public static bool Prefix(PlayerAvatar __instance, ref PhotonMessageInfo info)
         {
@@ -124,7 +124,7 @@ internal class RPCPatches
     }
 
     [HarmonyPatch(typeof(TruckScreenText), nameof (TruckScreenText.SelfDestructPlayersOutsideTruckRPC))]
-    internal static class TruckScreenTextSelfDestructPlayersOutsideTruckRpcPatch
+    internal static class SelfDestructPlayersOutsideTruck
     {
         public static bool Prefix(ref PhotonMessageInfo info)
         {
