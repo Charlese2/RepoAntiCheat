@@ -19,17 +19,19 @@ internal class RPCPatches
                 return false;
             }
 
+
+
+            if (_message.Length > 50)
+            {
+                _message = _message[..50];
+            }
+
             string sanitizedChatMessage;
             sanitizedChatMessage = Regex.Replace(_message, @"<(\S+?)>", "($+)");
 
-            if (sanitizedChatMessage.Length > 50)
-            {
-                sanitizedChatMessage = sanitizedChatMessage[..50];
-            }
-
             if (string.IsNullOrWhiteSpace(sanitizedChatMessage))
             {
-                Log.LogInfo($"{info.Sender} Chat message was empty after sanitization. Original Message: ({_message})");
+                Log.LogInfo($"{info.Sender} Chat message was empty. Original Message: ({_message})");
                 return false;
             }
 
@@ -86,7 +88,6 @@ internal class RPCPatches
     {
         public static bool Prefix(PlayerHealth __instance, int damage, ref PhotonMessageInfo info)
         {
-
             PlayerAvatar? sendingPlayer = GetPlayerAvatarFromActorNumber(info.Sender.ActorNumber);
 
             if (sendingPlayer != null && Vector3.Distance(sendingPlayer.transform.position, __instance.transform.position) > 2f)
