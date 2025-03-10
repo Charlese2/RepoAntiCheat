@@ -23,7 +23,7 @@ internal class RPCPatches
 
             if (sanitizedChatMessage.Length > 50)
             {
-                return false;
+                sanitizedChatMessage = sanitizedChatMessage[..50];
             }
 
             if (string.IsNullOrWhiteSpace(sanitizedChatMessage))
