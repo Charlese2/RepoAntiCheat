@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using System.Text.RegularExpressions;
-using Unity.VisualScripting;
 
 namespace RepoAntiCheat.Patches
 {
@@ -14,7 +13,12 @@ namespace RepoAntiCheat.Patches
                 string sanitizedName;
                 sanitizedName = Regex.Replace(_player.playerName, @"<(\S+?)>", "");
 
-                _player.playerName = sanitizedName.ToShortString(32);
+                if (sanitizedName.Length > 32)
+                {
+                    sanitizedName = sanitizedName[..32];
+                }
+
+                _player.playerName = sanitizedName;
             }
         }
     }
