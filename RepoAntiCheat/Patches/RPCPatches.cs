@@ -1,5 +1,6 @@
 using HarmonyLib;
 using Photon.Pun;
+using Photon.Realtime;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using static RepoAntiCheat.RepoAntiCheat;
@@ -19,13 +20,13 @@ internal class RPCPatches
                 return false;
             }
 
-            if (_message.Length > 50)
-            {
-                _message = _message[..50];
-            }
-
             string sanitizedChatMessage;
             sanitizedChatMessage = Regex.Replace(_message, @"<(\S+?)>", "");
+
+            if (sanitizedChatMessage.Length > 50)
+            {
+                sanitizedChatMessage = sanitizedChatMessage[..50];
+            }
 
             if (string.IsNullOrWhiteSpace(sanitizedChatMessage))
             {
@@ -42,9 +43,29 @@ internal class RPCPatches
     [HarmonyPatch(typeof(PlayerAvatar), nameof(PlayerAvatar.AddToStatsManagerRPC))]
     internal static class AddToStatsManager
     {
-        public static void Prefix(PlayerAvatar __instance, string _playerName, ref PhotonMessageInfo info)
+        public static bool Prefix(PlayerAvatar __instance, ref string _playerName, ref PhotonMessageInfo info)
         {
+            if (info.Sender == null)
+            {
+                return true;
+            }
 
+            if (__instance.photonView.Owner != info.Sender)
+            {
+                return false;
+            }
+
+            string sanitizedName;
+            sanitizedName = Regex.Replace(_playerName, @"<(\S+?)>", "");
+
+            if (sanitizedName.Length > 32)
+            {
+                sanitizedName = sanitizedName[..32];
+            }
+
+            _playerName = sanitizedName;
+
+            return true;
         }
     }
 
