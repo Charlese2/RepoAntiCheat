@@ -17,6 +17,7 @@ public class RepoAntiCheat : BaseUnityPlugin
 
     private static void PlayerNumberingChanged()
     {
+        Log.LogInfo("PlayerNumberingChanged");
         playerActorNrToPlayerAvatarMap.Clear();
     }
 
@@ -50,7 +51,7 @@ public class RepoAntiCheat : BaseUnityPlugin
         Log.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
     }
 
-    private void Destroy()
+    private void OnDestroy()
     {
         PlayerNumbering.OnPlayerNumberingChanged -= PlayerNumberingChanged;
         Unpatch();

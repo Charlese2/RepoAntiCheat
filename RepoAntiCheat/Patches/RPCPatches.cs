@@ -19,15 +19,13 @@ internal class RPCPatches
                 return false;
             }
 
-
-
             if (_message.Length > 50)
             {
                 _message = _message[..50];
             }
 
             string sanitizedChatMessage;
-            sanitizedChatMessage = Regex.Replace(_message, @"<(\S+?)>", "($+)");
+            sanitizedChatMessage = Regex.Replace(_message, @"<(\S+?)>", "");
 
             if (string.IsNullOrWhiteSpace(sanitizedChatMessage))
             {
@@ -36,6 +34,47 @@ internal class RPCPatches
             }
 
             _message = sanitizedChatMessage;
+
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerAvatar), nameof(PlayerAvatar.AddToStatsManagerRPC))]
+    internal static class AddToStatsManager
+    {
+        public static void Prefix(PlayerAvatar __instance, string _playerName, ref PhotonMessageInfo info)
+        {
+
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerAvatar), nameof(PlayerAvatar.ReviveRPC))]
+    internal static class Revive
+    {
+        public static bool Prefix(PlayerAvatar __instance, bool _revivedByTruck, ref PhotonMessageInfo info)
+        {
+            Log.LogInfo($"[ReviveRPC] Player ({info.Sender}) _revivedByTruck ({_revivedByTruck})");
+
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerAvatar), nameof(PlayerAvatar.OutroStartRPC))]
+    internal static class OutroStart
+    {
+        public static bool Prefix(PlayerAvatar __instance, ref PhotonMessageInfo info)
+        {
+            if (info.Sender == null)
+            {
+                return true;
+            }
+
+            if (info.Sender != PhotonNetwork.MasterClient)
+            {
+                Log.LogInfo($"Player ({info.Sender}) tried to call OutroStartRPC " +
+                    $"for ({__instance.photonView.Owner}) while not the master client ({PhotonNetwork.MasterClient}) ");
+                return false;
+            }
 
             return true;
         }
@@ -94,27 +133,6 @@ internal class RPCPatches
             {
                 Log.LogInfo($"{info.Sender} sent HurtOtherRPC with damage ({damage}) from too far away " +
                     $"({Vector3.Distance(sendingPlayer.transform.position, __instance.transform.position)})");
-                return false;
-            }
-
-            return true;
-        }
-    }
-
-    [HarmonyPatch(typeof(PlayerAvatar), nameof(PlayerAvatar.OutroStartRPC))]
-    internal static class OutroStart
-    {
-        public static bool Prefix(PlayerAvatar __instance, ref PhotonMessageInfo info)
-        {
-            if (info.Sender == null)
-            {
-                return true;
-            }
-
-            if (info.Sender != PhotonNetwork.MasterClient)
-            {
-                Log.LogInfo($"Player ({info.Sender}) tried to call OutroStartRPC " +
-                    $"for ({__instance.photonView.Owner}) while not the master client ({PhotonNetwork.MasterClient}) ");
                 return false;
             }
 

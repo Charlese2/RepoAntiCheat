@@ -26,7 +26,7 @@
       },
       "R.E.P.O.GameLibs.Steam": {
         "type": "Direct",
-        "requested": "[0.1.2-ngd.0, )",
+        "requested": "[*-*, )",
         "resolved": "0.1.2-ngd.0",
         "contentHash": "j9JQv7huf5P+lBkAGQG72Yf/dpcZTDBMnExxOyqZe8NjLgqvbOmO3/vtjWLsT/6FtapYvasry9//apO6XRq/Gg==",
         "dependencies": {
