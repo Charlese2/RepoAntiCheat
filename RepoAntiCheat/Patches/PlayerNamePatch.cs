@@ -6,7 +6,7 @@ namespace RepoAntiCheat.Patches
     class PlayerNamePatch
     {
         [HarmonyPatch(typeof(WorldSpaceUIParent), nameof(WorldSpaceUIParent.PlayerName))]
-        internal static class AddToStatsManager
+        internal static class SanitizePlayerName
         {
             public static void Prefix(ref PlayerAvatar _player)
             {
