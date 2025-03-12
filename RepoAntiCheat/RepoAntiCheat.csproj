@@ -2,10 +2,14 @@
 
     <!-- BepInEx Properties -->
     <PropertyGroup>
-        <AssemblyName>RepoAntiCheat</AssemblyName>
+        <AssemblyName>com.github.CharlesE2.$(MSBuildProjectName)</AssemblyName>
+        <Description>Client-side anticheat mod.</Description>
         <Product>RepoAntiCheat</Product>
+        <Authors>CharlesE2</Authors>
+        <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/Charlese2/RepoAntiCheat</RepositoryUrl>
         <ProjectDepsFileName>$(MSBuildProjectName).deps.json</ProjectDepsFileName>
+        <TargetName>$(MSBuildProjectName)</TargetName>
         <!-- Change to whatever version you're currently on. -->
         <Version>1.0.0</Version>
     </PropertyGroup>

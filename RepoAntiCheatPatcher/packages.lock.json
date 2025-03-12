@@ -2,12 +2,6 @@
   "version": 1,
   "dependencies": {
     ".NETStandard,Version=v2.1": {
-      "BepInEx.Analyzers": {
-        "type": "Direct",
-        "requested": "[1.*, )",
-        "resolved": "1.0.8",
-        "contentHash": "xrfNmunsPhBx+vStTxLonq/aHkRrDH77c9tG/x3m5eejrKe5B0nf7cJPRRt6x330sGI0bLaPTtygdeHUgvI3wQ=="
-      },
       "BepInEx.Core": {
         "type": "Direct",
         "requested": "[5.*, )",
@@ -17,18 +11,6 @@
           "BepInEx.BaseLib": "5.4.20",
           "HarmonyX": "2.7.0"
         }
-      },
-      "BepInEx.PluginInfoProps": {
-        "type": "Direct",
-        "requested": "[2.*, )",
-        "resolved": "2.1.0",
-        "contentHash": "VCG3QRiqNdW9ku2FEcNsbK+HKxrZmW0VxwMNyLNO7h0xGorU+C6vBHN8Qq4eAL5fU11Uks5x2uoYdqEoKD3P8A=="
-      },
-      "UnityEngine.Modules": {
-        "type": "Direct",
-        "requested": "[2022.3.21, )",
-        "resolved": "2022.3.21",
-        "contentHash": "l5ZNBDk9HyF3i8ISutWbc/jw24pYww0K0HIdbUN4RbzAnvO3lftvr15jyG0bTevBZuVxkwNrZ6SXY9pooIbIkA=="
       },
       "BepInEx.BaseLib": {
         "type": "Transitive",
