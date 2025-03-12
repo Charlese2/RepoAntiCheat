@@ -217,9 +217,6 @@ internal class RPCPatches
     {
         public static bool Prefix(PlayerHealth __instance, int healthNew, int healthMax, ref PhotonMessageInfo info)
         {
-            Log.LogInfo($"[UpdateHealthRPC] __instance.photonView.Owner ({__instance.photonView.Owner}) info.Sender: ({info.Sender})" +
-                $"healthNew: ({healthNew}) healthMax: ({healthMax}).");
-
             if (info.Sender == null)
             {
                 return true;
@@ -227,8 +224,6 @@ internal class RPCPatches
 
             if (info.Sender != __instance.photonView.Owner)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call UpdateHealthRPC " +
-                    $"while not the the owner ({__instance.photonView.Owner})");
                 return false;
             }
 
