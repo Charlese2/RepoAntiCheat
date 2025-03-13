@@ -2,9 +2,11 @@
 using BepInEx.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
-using System;
+using Mono.Cecil.Rocks;
+using MonoMod.Cil;
 using System.Collections.Generic;
 using System.Linq;
+using OpCodes = Mono.Cecil.Cil.OpCodes;
 
 public static class RpcPatcher
 {
@@ -16,6 +18,7 @@ public static class RpcPatcher
         Log.LogMessage("Patching RPCs to include PhotonMessageInfo parameter.");
 
         int rpcsPatched = 0;
+        int localRpcCallsPatched = 0;
 
         if (!assembly.MainModule.TryGetTypeReference("Photon.Pun.PhotonMessageInfo", out TypeReference photonMessageInfo))
         {
@@ -23,7 +26,7 @@ public static class RpcPatcher
         }
 
         List<MethodDefinition> methods = [];
-        List<Tuple<TypeDefinition, MethodDefinition>> rpcList = [];
+        List<MethodDefinition> rpcMethods = [];
 
         foreach (TypeDefinition type in assembly.MainModule.GetTypes())
         {
@@ -31,56 +34,54 @@ public static class RpcPatcher
             {
                 if (method.HasBody)
                 {
+                    methods.Add(method);
                     if (method.HasCustomAttributes && method.CustomAttributes.Any(attribute => attribute.AttributeType.ToString() == "Photon.Pun.PunRPC"))
                     {
-                        rpcList.Add(new Tuple<TypeDefinition, MethodDefinition>(type, method));
+                        method.Parameters.Add(new ParameterDefinition("info", ParameterAttributes.Optional, photonMessageInfo));
+                        rpcMethods.Add(method);
+                        rpcsPatched++;
                     }
                 }
             }
         }
 
-        foreach (var rpc in rpcList)
+        SortedList<int, Instruction> calls = [];
+
+        foreach (MethodDefinition method in methods)
         {
-            TypeDefinition type = rpc.Item1;
-            MethodDefinition originalMethod = rpc.Item2;
-            MethodDefinition newRpcMethod = new(originalMethod.Name, originalMethod.Attributes, originalMethod.ReturnType)
+            ILProcessor iLProcessor = method.Body.GetILProcessor();
+            method.Body.SimplifyMacros();
+
+            foreach (MethodDefinition rpcMethod in rpcMethods)
             {
-                Attributes = originalMethod.Attributes,
-                Body = originalMethod.Body,
-                CallingConvention = originalMethod.CallingConvention,
-                DebugInformation = originalMethod.DebugInformation,
-                DeclaringType = originalMethod.DeclaringType,
-                ImplAttributes = originalMethod.ImplAttributes,
-                MethodReturnType = originalMethod.MethodReturnType,
-                ReturnType = originalMethod.ReturnType,
-            };
-            foreach (ParameterDefinition parameter in originalMethod.Parameters)
-            {
-                newRpcMethod.Parameters.Add(parameter);
-            }
-            foreach (CustomAttribute customAttribute in originalMethod.CustomAttributes)
-            {
-                newRpcMethod.CustomAttributes.Add(customAttribute);
-            }
-            foreach (SecurityDeclaration securityDeclaration in originalMethod.SecurityDeclarations)
-            {
-                newRpcMethod.SecurityDeclarations.Add(securityDeclaration);
-            }
-            foreach (CustomDebugInformation customDebugInformation in originalMethod.CustomDebugInformations)
-            {
-                newRpcMethod.CustomDebugInformations.Add(customDebugInformation);
+                foreach (Instruction instruction in method.Body.Instructions)
+                {
+                    if (instruction.MatchCallOrCallvirt(rpcMethod))
+                    {
+                        calls.Add(instruction.Offset, instruction);
+                    }
+                }
             }
 
-            newRpcMethod.Parameters.Add(new ParameterDefinition("info", ParameterAttributes.Optional, photonMessageInfo));
+            if (calls.Count > 0)
+            {
+                method.Body.Variables.Add(new VariableDefinition(photonMessageInfo));
+            }
 
-            // Remove PunRPC attribute from singleplayer RPC function.
-            CustomAttribute punRpcAttribute = originalMethod.CustomAttributes.First(attribute => attribute.AttributeType.ToString() == "Photon.Pun.PunRPC");
-            originalMethod.CustomAttributes.Remove(punRpcAttribute);
+            foreach (Instruction instruction in calls.Values)
+            {
+                
+                iLProcessor.InsertBefore(instruction, iLProcessor.Create(OpCodes.Ldloca_S, method.Body.Variables.Last()));
+                iLProcessor.InsertBefore(instruction, iLProcessor.Create(OpCodes.Initobj, photonMessageInfo));
+                iLProcessor.InsertBefore(instruction, iLProcessor.Create(OpCodes.Ldloc_S, method.Body.Variables.Last()));
 
-            type.Methods.Add(newRpcMethod);
-            rpcsPatched++;
+                localRpcCallsPatched++;
+            }
+
+            method.Body.OptimizeMacros();
+            calls.Clear();
         }
 
-        Log.LogMessage($"Finished Patching {rpcsPatched} RPCs");
+        Log.LogMessage($"Finished Patching {rpcsPatched} RPCs and {localRpcCallsPatched} local RPC calls");
     }
 }
