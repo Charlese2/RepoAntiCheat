@@ -70,7 +70,7 @@ internal class RPCPatches
     }
 
     [HarmonyPatch(typeof(Arena), nameof(Arena.DestroyCrownCageRPC))]
-    internal static class DestroyCrownCageRPC
+    internal static class DestroyCrownCage
     {
         public static bool Prefix(ref PhotonMessageInfo info)
         {
@@ -217,7 +217,7 @@ internal class RPCPatches
     }
 
     [HarmonyPatch(typeof(EnemyFloater), nameof(EnemyFloater.NoticeRPC))]
-    internal static class EnemyFloater_NoticeRPC
+    internal static class EnemyFloater_Notice
     {
         public static bool Prefix(ref PhotonMessageInfo info)
         {
@@ -429,7 +429,7 @@ internal class RPCPatches
     }
 
     [HarmonyPatch(typeof(EnemyTumbler), nameof(EnemyTumbler.TargetPlayerRPC))]
-    internal static class EnemyTumbler_TargetPlayerRPC
+    internal static class EnemyTumbler_TargetPlayer
     {
         public static bool Prefix(ref PhotonMessageInfo info)
         {
@@ -692,7 +692,7 @@ internal class RPCPatches
     }
 
     [HarmonyPatch(typeof(MapToolController), nameof(MapToolController.SetActiveRPC))]
-    internal static class SetActiveRPC
+    internal static class SetActive
     {
         public static bool Prefix(MapToolController __instance, ref PhotonMessageInfo info)
         {
@@ -861,7 +861,7 @@ internal class RPCPatches
         {
             if (info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call ReceiveSyncData " +
+                Log.LogInfo($"Player ({info.Sender}) tried to call UpdateStatRPC " +
                     $"with input of [({dictionaryName}), ({key}), ({value})]" +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
