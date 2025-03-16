@@ -35,7 +35,9 @@ public static class RpcPatcher
                 if (method.HasBody)
                 {
                     methods.Add(method);
-                    if (method.HasCustomAttributes && method.CustomAttributes.Any(attribute => attribute.AttributeType.ToString() == "Photon.Pun.PunRPC"))
+                    if (method.HasCustomAttributes &&
+                        method.CustomAttributes.Any(attribute => attribute.AttributeType.ToString() == "Photon.Pun.PunRPC") &&
+                        !method.Parameters.Any(parameter => parameter.ParameterType.ToString() == "Photon.Pun.PhotonMessageInfo"))
                     {
                         method.Parameters.Add(new ParameterDefinition("info", ParameterAttributes.Optional, photonMessageInfo));
                         rpcMethods.Add(method);
