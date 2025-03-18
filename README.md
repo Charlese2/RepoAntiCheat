@@ -19,7 +19,6 @@ This also won't protect you if the host is cheating.
 | `PlayerAvatar.OutroStartRPC` | Softlocked in a permanent loading screen |
 | `PlayerAvatar.SpawnRPC` | Teleporting another player |
 | `PlayerAvater.PlayerDeathRPC` | Killing another player |
-| `PlayerAvatar.ReviveRPC` | Reviving others |
 | `PlayerHealth.UpdateHealthRPC` | Modifying health of another player |
 | `PlayerHealth.HurtOtherRPC` | Hurting / killing players |
 | `ExtractionPoint.HaulGoalSetRPC` | Changing goal amount |
