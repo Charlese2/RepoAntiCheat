@@ -812,7 +812,7 @@ internal class RPCPatches
                 }
 
                 Log.LogInfo($"Player ({info.Sender}) tried to call SetItemNameRPC " +
-                    $"with a name of ({itemAttributes.instanceName}) to ({name}) " +
+                    $"with a name of ({itemAttributes.instanceName}) to new name ({name}) " +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
