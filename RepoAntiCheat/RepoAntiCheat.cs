@@ -53,12 +53,14 @@ public class RepoAntiCheat : BaseUnityPlugin
         Log.LogInfo($"{MyPluginInfo.PLUGIN_NAME} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
     }
 
+#if DEBUG
     private void OnDestroy()
     {
         PlayerNumbering.OnPlayerNumberingChanged -= PlayerNumberingChanged;
         Unpatch();
         Log.LogInfo($"{MyPluginInfo.PLUGIN_NAME} v{MyPluginInfo.PLUGIN_VERSION} has unloaded!");
     }
+#endif
 
     internal static void Patch()
     {
