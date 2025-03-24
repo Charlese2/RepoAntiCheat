@@ -21,11 +21,6 @@ public class AntiCheatPlugin : BaseUnityPlugin
     internal static bool itemSetupOnCooldown;
     internal static bool navMeshSetupOnCooldown;
 
-    private static void PlayerNumberingChanged()
-    {
-        Log.LogInfo("PlayerNumberingChanged");
-        playerActorNrToPlayerAvatarMap.Clear();
-    }
 
     public static PlayerAvatar? GetPlayerAvatarFromActorNumber(int actorNumber)
     {
@@ -63,7 +58,6 @@ public class AntiCheatPlugin : BaseUnityPlugin
             "Logs when clients other than the host revive people");
 
         Patch();
-        PlayerNumbering.OnPlayerNumberingChanged += PlayerNumberingChanged;
 
         Log.LogInfo($"{MyPluginInfo.PLUGIN_NAME} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
     }
