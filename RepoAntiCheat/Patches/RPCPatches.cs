@@ -3,7 +3,7 @@ using Photon.Pun;
 using System;
 using System.Text.RegularExpressions;
 using UnityEngine;
-using static RepoAntiCheat.RepoAntiCheat;
+using static RepoAntiCheat.AntiCheatPlugin;
 
 namespace RepoAntiCheat.Patches;
 
@@ -14,7 +14,7 @@ internal class RPCPatches
     {
         public static void Postfix(NetworkManager __instance)
         {
-            Math.Clamp(__instance.instantiatedPlayerAvatars, 0, PhotonNetwork.CurrentRoom.PlayerCount);
+            __instance.instantiatedPlayerAvatars = Math.Clamp(__instance.instantiatedPlayerAvatars, 0, PhotonNetwork.CurrentRoom.PlayerCount);
         }
     }
 
@@ -23,7 +23,7 @@ internal class RPCPatches
     {
         public static void Postfix(ReloadScene __instance)
         {
-            Math.Clamp(__instance.PlayersReady, 0, PhotonNetwork.CurrentRoom.PlayerCount);
+            __instance.PlayersReady = Math.Clamp(__instance.PlayersReady, 0, PhotonNetwork.CurrentRoom.PlayerCount);
         }
     }
 
@@ -691,6 +691,49 @@ internal class RPCPatches
         }
     }
 
+    [HarmonyPatch(typeof(ItemAttributes), nameof(ItemAttributes.GetValueRPC))]
+    internal static class GetValue
+    {
+        public static bool Prefix(ItemAttributes __instance, int _value, ref PhotonMessageInfo info)
+        {
+            if (info.Sender == null)
+            {
+                return true;
+            }
+
+            if (info.Sender != PhotonNetwork.MasterClient)
+            {
+                Log.LogInfo($"Player ({info.Sender}) tried to call GetValueRPC " +
+                    $"on ({__instance.gameObject.name}) with a value of ({_value})" +
+                    $"while not the master client ({PhotonNetwork.MasterClient}).");
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(ItemGun), nameof(ItemGun.ShootBulletRPC))]
+    internal static class ShootBullet
+    {
+        public static bool Prefix(ref PhotonMessageInfo info)
+        {
+            if (info.Sender == null)
+            {
+                return true;
+            }
+
+            if (info.Sender != PhotonNetwork.MasterClient)
+            {
+                Log.LogInfo($"Player ({info.Sender}) tried to call ShootBulletRPC " +
+                    $"while not the master client ({PhotonNetwork.MasterClient}).");
+                return false;
+            }
+
+            return true;
+        }
+    }
+
     [HarmonyPatch(typeof(MapToolController), nameof(MapToolController.SetActiveRPC))]
     internal static class SetActive
     {
@@ -789,6 +832,27 @@ internal class RPCPatches
             {
                 Log.LogInfo($"{info.Sender} sent HurtOtherRPC with damage ({damage}) from too far away " +
                     $"({Vector3.Distance(sendingPlayer.transform.position, __instance.transform.position)}).");
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerTumble), nameof(PlayerTumble.TumbleSetRPC))]
+    internal static class TumbleSet
+    {
+        public static bool Prefix(ref PhotonMessageInfo info)
+        {
+            if (info.Sender == null)
+            {
+                return true;
+            }
+
+            if (info.Sender != PhotonNetwork.MasterClient)
+            {
+                Log.LogInfo($"Player ({info.Sender}) tried to call TumbleSetRPC " +
+                    $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
 
@@ -1135,7 +1199,7 @@ internal class RPCPatches
     [HarmonyPatch(typeof(LevelGenerator), nameof(LevelGenerator.EnemySpawnTargetRPC))]
     internal static class EnemySpawnTarget
     {
-        public static bool Prefix(int _amount ,ref PhotonMessageInfo info)
+        public static bool Prefix(int _amount, ref PhotonMessageInfo info)
         {
             if (info.Sender == null)
             {
@@ -1148,6 +1212,83 @@ internal class RPCPatches
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
+
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(LevelGenerator), nameof(LevelGenerator.GenerateDone))]
+    internal static class GenerateDone
+    {
+        public static bool Prefix(ref PhotonMessageInfo info)
+        {
+            if (info.Sender == null)
+            {
+                return true;
+            }
+
+            if (info.Sender != PhotonNetwork.MasterClient)
+            {
+                Log.LogInfo($"Player ({info.Sender}) tried to call GenerateDone " +
+                    $"while not the master client ({PhotonNetwork.MasterClient}).");
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(LevelGenerator), nameof(LevelGenerator.ItemSetup))]
+    internal static class ItemSetup
+    {
+        public static bool Prefix(ref PhotonMessageInfo info)
+        {
+            if (info.Sender == null)
+            {
+                return true;
+            }
+
+            if (itemSetupOnCooldown)
+            {
+                return false;
+            }
+
+            if (info.Sender != PhotonNetwork.MasterClient)
+            {
+                Log.LogInfo($"Player ({info.Sender}) tried to call ItemSetup " +
+                    $"while not the master client ({PhotonNetwork.MasterClient}).");
+                return false;
+            }
+
+            Instance.StartCoroutine(ItemSetupCooldown());
+
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(LevelGenerator), nameof(LevelGenerator.NavMeshSetupRPC))]
+    internal static class NavMeshSetup
+    {
+        public static bool Prefix(ref PhotonMessageInfo info)
+        {
+            if (info.Sender == null)
+            {
+                return true;
+            }
+
+            if (navMeshSetupOnCooldown)
+            {
+                return false;
+            }
+
+            if (info.Sender != PhotonNetwork.MasterClient)
+            {
+                Log.LogInfo($"Player ({info.Sender}) tried to call NavMeshSetupRPC " +
+                    $"while not the master client ({PhotonNetwork.MasterClient}).");
+                return false;
+            }
+
+            Instance.StartCoroutine(NavMeshSetupCooldown());
 
             return true;
         }
@@ -1174,6 +1315,43 @@ internal class RPCPatches
         }
     }
 
+    [HarmonyPatch(typeof(ValuableDirector), nameof(ValuableDirector.ValuablesTargetSetRPC))]
+    internal static class ValuablesTargetSet
+    {
+        public static bool Prefix(int _amount, ref PhotonMessageInfo info)
+        {
+            if (info.Sender != PhotonNetwork.MasterClient)
+            {
+                Log.LogInfo($"Player ({info.Sender}) tried to call ValuablesTargetSetRPC with an amount of ({_amount})" +
+                    $"while not the master client ({PhotonNetwork.MasterClient}).");
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(ValuableDirector), nameof(ValuableDirector.VolumesAndSwitchSetupRPC))]
+    internal static class VolumesAndSwitchSetup
+    {
+        public static bool Prefix(ref PhotonMessageInfo info)
+        {
+            if (info.Sender == null)
+            {
+                return true;
+            }
+
+            if (info.Sender != PhotonNetwork.MasterClient)
+            {
+                Log.LogInfo($"Player ({info.Sender}) tried to call VolumesAndSwitchSetupRPC " +
+                    $"while not the master client ({PhotonNetwork.MasterClient}).");
+                return false;
+            }
+
+            return true;
+        }
+    }
+    
     [HarmonyPatch(typeof(ValuableObject), nameof(ValuableObject.DollarValueSetRPC))]
     internal static class DollarValueSet
     {
