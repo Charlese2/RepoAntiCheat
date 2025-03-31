@@ -9,24 +9,6 @@ namespace RepoAntiCheat.Patches;
 
 internal class RPCPatches
 {
-    [HarmonyPatch(typeof(NetworkManager), nameof(NetworkManager.PlayerSpawnedRPC))]
-    internal static class ClampInstantiatedPlayerAvatarsValue
-    {
-        public static void Postfix(NetworkManager __instance)
-        {
-            __instance.instantiatedPlayerAvatars = Math.Clamp(__instance.instantiatedPlayerAvatars, 0, PhotonNetwork.CurrentRoom.PlayerCount);
-        }
-    }
-
-    [HarmonyPatch(typeof(ReloadScene), nameof(ReloadScene.PlayerReady))]
-    internal static class ClampPlayersReadyValue
-    {
-        public static void Postfix(ReloadScene __instance)
-        {
-            __instance.PlayersReady = Math.Clamp(__instance.PlayersReady, 0, PhotonNetwork.CurrentRoom.PlayerCount);
-        }
-    }
-
     [HarmonyPatch(typeof(Arena), nameof(Arena.CrownGrabRPC))]
     internal static class CrownGrab
     {
