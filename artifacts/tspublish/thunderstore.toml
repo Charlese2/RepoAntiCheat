@@ -28,4 +28,4 @@
   repository = "https://thunderstore.io"
   communities = ["repo"]
   [publish.categories]
-    lethal-company = ["mods", "misc", "clientside"]
+    repo = ["mods", "misc", "clientside"]

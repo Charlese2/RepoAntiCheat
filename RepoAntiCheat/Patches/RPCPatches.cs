@@ -1,6 +1,5 @@
 using HarmonyLib;
 using Photon.Pun;
-using System;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using static RepoAntiCheat.AntiCheatPlugin;
