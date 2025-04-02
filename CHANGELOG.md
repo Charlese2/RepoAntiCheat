@@ -1,3 +1,6 @@
+# 1.0.4
+- Add more RPC checks.
+- Changed loading checks to be more relaxed.
 # 1.0.3
 - Add more RPC checks.
 - Add cooldown to some level generator RPCs.
