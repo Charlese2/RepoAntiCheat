@@ -818,7 +818,7 @@ internal class RPCPatches
     {
         public static bool Prefix(PlayerHealth __instance, ref PhotonMessageInfo info)
         {
-            if (info.Sender == null)
+            if (info.Sender == null || info.Sender == PhotonNetwork.MasterClient)
             {
                 return true;
             }

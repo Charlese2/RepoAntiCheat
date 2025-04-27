@@ -11,7 +11,7 @@
         <ProjectDepsFileName>$(MSBuildProjectName).deps.json</ProjectDepsFileName>
         <TargetName>$(MSBuildProjectName)</TargetName>
         <!-- Change to whatever version you're currently on. -->
-        <Version>1.0.4</Version>
+        <Version>1.0.5</Version>
     </PropertyGroup>
 
     <!-- Project Properties -->

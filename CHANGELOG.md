@@ -1,3 +1,5 @@
+# 1.0.5
+- Changed HealthUpdateRPC check to allow host to call it on other people.
 # 1.0.4
 - Add more RPC checks.
 - Changed loading checks to be more relaxed.
