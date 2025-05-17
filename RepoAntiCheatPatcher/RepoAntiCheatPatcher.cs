@@ -39,7 +39,7 @@ public static class RpcPatcher
                         method.CustomAttributes.Any(attribute => attribute.AttributeType.ToString() == "Photon.Pun.PunRPC") &&
                         !method.Parameters.Any(parameter => parameter.ParameterType.ToString() == "Photon.Pun.PhotonMessageInfo"))
                     {
-                        method.Parameters.Add(new ParameterDefinition("info", ParameterAttributes.Optional, photonMessageInfo));
+                        method.Parameters.Add(new ParameterDefinition("_info", ParameterAttributes.Optional, photonMessageInfo));
                         rpcMethods.Add(method);
                         rpcsPatched++;
                     }

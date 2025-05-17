@@ -95,16 +95,16 @@ internal class RPCPatches
     [HarmonyPatch(typeof(EnemyRigidbody), nameof(EnemyRigidbody.GrabbedSetRPC))]
     internal static class EnemyRigidbody_GrabbedSet
     {
-        public static bool Prefix(ref PhotonMessageInfo info)
+        public static bool Prefix(ref PhotonMessageInfo _info)
         {
-            if (info.Sender == null)
+            if (_info.Sender == null)
             {
                 return true;
             }
 
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call EnemyRigidbody.GrabbedSetRPC " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call EnemyRigidbody.GrabbedSetRPC " +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
@@ -284,16 +284,16 @@ internal class RPCPatches
     [HarmonyPatch(typeof(EnemyJump), nameof(EnemyJump.JumpingSetRPC))]
     internal static class EnemyJump_JumpingSet
     {
-        public static bool Prefix(ref PhotonMessageInfo info)
+        public static bool Prefix(ref PhotonMessageInfo _info)
         {
-            if (info.Sender == null)
+            if (_info.Sender == null)
             {
                 return true;
             }
 
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call EnemyJump.JumpingSetRPC " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call EnemyJump.JumpingSetRPC " +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
@@ -305,16 +305,16 @@ internal class RPCPatches
     [HarmonyPatch(typeof(EnemyJump), nameof(EnemyJump.JumpingDelaySetRPC))]
     internal static class EnemyJump_JumpingDelaySet
     {
-        public static bool Prefix(ref PhotonMessageInfo info)
+        public static bool Prefix(ref PhotonMessageInfo _info)
         {
-            if (info.Sender == null)
+            if (_info.Sender == null)
             {
                 return true;
             }
 
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call EnemyJump.JumpingDelaySetRPC " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call EnemyJump.JumpingDelaySetRPC " +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
@@ -326,16 +326,16 @@ internal class RPCPatches
     [HarmonyPatch(typeof(EnemyJump), nameof(EnemyJump.LandDelaySetRPC))]
     internal static class EnemyJump_LandDelaySet
     {
-        public static bool Prefix(ref PhotonMessageInfo info)
+        public static bool Prefix(ref PhotonMessageInfo _info)
         {
-            if (info.Sender == null)
+            if (_info.Sender == null)
             {
                 return true;
             }
 
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call EnemyJump.LandDelaySetRPC " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call EnemyJump.LandDelaySetRPC " +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
@@ -609,11 +609,11 @@ internal class RPCPatches
     [HarmonyPatch(typeof(PlayerAvatar), nameof(PlayerAvatar.UpdateMyPlayerVoiceChat))]
     internal static class UpdateMyPlayerVoiceChat
     {
-        public static bool Prefix(PlayerAvatar __instance, ref PhotonMessageInfo info)
+        public static bool Prefix(PlayerAvatar __instance, ref PhotonMessageInfo _info)
         {
-            if (info.Sender != __instance.photonView.Owner)
+            if (_info.Sender != __instance.photonView.Owner)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call UpdateMyPlayerVoiceChat " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call UpdateMyPlayerVoiceChat " +
                     $"for another player ({__instance.photonView.Owner})");
                 return false;
             }
@@ -710,16 +710,16 @@ internal class RPCPatches
     [HarmonyPatch(typeof(ItemAttributes), nameof(ItemAttributes.GetValueRPC))]
     internal static class GetValue
     {
-        public static bool Prefix(ItemAttributes __instance, int _value, ref PhotonMessageInfo info)
+        public static bool Prefix(ItemAttributes __instance, int _value, ref PhotonMessageInfo _info)
         {
-            if (info.Sender == null)
+            if (_info.Sender == null)
             {
                 return true;
             }
 
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call GetValueRPC " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call GetValueRPC " +
                     $"on ({__instance.gameObject.name}) with a value of ({_value})" +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
@@ -732,16 +732,16 @@ internal class RPCPatches
     [HarmonyPatch(typeof(ItemGun), nameof(ItemGun.ShootBulletRPC))]
     internal static class ShootBullet
     {
-        public static bool Prefix(ref PhotonMessageInfo info)
+        public static bool Prefix(ref PhotonMessageInfo _info)
         {
-            if (info.Sender == null)
+            if (_info.Sender == null)
             {
                 return true;
             }
 
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call ShootBulletRPC " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call ShootBulletRPC " +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
@@ -753,16 +753,16 @@ internal class RPCPatches
     [HarmonyPatch(typeof(MapToolController), nameof(MapToolController.SetActiveRPC))]
     internal static class SetActive
     {
-        public static bool Prefix(MapToolController __instance, ref PhotonMessageInfo info)
+        public static bool Prefix(MapToolController __instance, ref PhotonMessageInfo _info)
         {
-            if (info.Sender == null)
+            if (_info.Sender == null)
             {
                 return true;
             }
 
-            if (info.Sender != __instance.photonView.Owner)
+            if (_info.Sender != __instance.photonView.Owner)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call SetActiveRPC " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call SetActiveRPC " +
                     $"for another client ({__instance.photonView.Owner}).");
                 return false;
             }
@@ -774,16 +774,16 @@ internal class RPCPatches
     [HarmonyPatch(typeof(RoundDirector), nameof(RoundDirector.ExtractionPointActivateRPC))]
     internal static class ExtractionPointActivate
     {
-        public static bool Prefix(ref PhotonMessageInfo info)
+        public static bool Prefix(ref PhotonMessageInfo _info)
         {
-            if (info.Sender == null)
+            if (_info.Sender == null)
             {
                 return true;
             }
 
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call ExtractionPointActivateRPC " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call ExtractionPointActivateRPC " +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
@@ -795,16 +795,16 @@ internal class RPCPatches
     [HarmonyPatch(typeof(RoundDirector), nameof(RoundDirector.ExtractionPointsUnlockRPC))]
     internal static class ExtractionPointsUnlock
     {
-        public static bool Prefix(ref PhotonMessageInfo info)
+        public static bool Prefix(ref PhotonMessageInfo _info)
         {
-            if (info.Sender == null)
+            if (_info.Sender == null)
             {
                 return true;
             }
 
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call ExtractionPointsUnlockRPC " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call ExtractionPointsUnlockRPC " +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
@@ -879,16 +879,16 @@ internal class RPCPatches
     [HarmonyPatch(typeof(PhysGrabObject), nameof(PhysGrabObject.DestroyPhysGrabObjectRPC))]
     internal static class PhysGrabObject_DestroyPhysGrabObject
     {
-        public static bool Prefix(ref PhotonMessageInfo info)
+        public static bool Prefix(ref PhotonMessageInfo _info)
         {
-            if (info.Sender == null)
+            if (_info.Sender == null)
             {
                 return true;
             }
 
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call PhysGrabObject.DestroyPhysGrabObjectRPC " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call PhysGrabObject.DestroyPhysGrabObjectRPC " +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
@@ -921,19 +921,19 @@ internal class RPCPatches
     [HarmonyPatch(typeof(PunManager), nameof(PunManager.SetItemNameRPC))]
     internal static class SetItemName
     {
-        public static bool Prefix(string name, int photonViewID, ref PhotonMessageInfo info)
+        public static bool Prefix(string name, int photonViewID, ref PhotonMessageInfo _info)
         {
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
                 PhotonView photonView = PhotonView.Find(photonViewID);
 
                 if (photonView == null || !photonView.TryGetComponent(out ItemAttributes itemAttributes))
                 {
-                    Log.LogInfo($"Player ({info.Sender}) tried to call SetItemNameRPC with an invalid photonViewID ({photonViewID}).");
+                    Log.LogInfo($"Player ({_info.Sender}) tried to call SetItemNameRPC with an invalid photonViewID ({photonViewID}).");
                     return false;
                 }
 
-                Log.LogInfo($"Player ({info.Sender}) tried to call SetItemNameRPC " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call SetItemNameRPC " +
                     $"with a name of ({itemAttributes.instanceName}) to new name ({name}) " +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
@@ -946,11 +946,11 @@ internal class RPCPatches
     [HarmonyPatch(typeof(PunManager), nameof(PunManager.SetRunStatRPC))]
     internal static class SetRunStat
     {
-        public static bool Prefix(string statName, int value, ref PhotonMessageInfo info)
+        public static bool Prefix(string statName, int value, ref PhotonMessageInfo _info)
         {
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call SetRunStatRPC " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call SetRunStatRPC " +
                     $"to set stat ({statName}) with a value of ({value})" +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
@@ -963,11 +963,11 @@ internal class RPCPatches
     [HarmonyPatch(typeof(PunManager), nameof(PunManager.ReceiveSyncData))]
     internal static class ReceiveSyncData
     {
-        public static bool Prefix(ref PhotonMessageInfo info)
+        public static bool Prefix(ref PhotonMessageInfo _info)
         {
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call ReceiveSyncData" +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call ReceiveSyncData" +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
@@ -979,11 +979,11 @@ internal class RPCPatches
     [HarmonyPatch(typeof(PunManager), nameof(PunManager.UpdateStatRPC))]
     internal static class UpdateStat
     {
-        public static bool Prefix(string dictionaryName, string key, int value, ref PhotonMessageInfo info)
+        public static bool Prefix(string dictionaryName, string key, int value, ref PhotonMessageInfo _info)
         {
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call UpdateStatRPC " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call UpdateStatRPC " +
                     $"with input of [({dictionaryName}), ({key}), ({value})]" +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
@@ -996,11 +996,11 @@ internal class RPCPatches
     [HarmonyPatch(typeof(PunManager), nameof(PunManager.UpdateShoppingCostRPC))]
     internal static class UpdateShoppingCost
     {
-        public static bool Prefix(int value, ref PhotonMessageInfo info)
+        public static bool Prefix(int value, ref PhotonMessageInfo _info)
         {
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call UpdateShoppingCostRPC with a value of ({value})" +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call UpdateShoppingCostRPC with a value of ({value})" +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
@@ -1012,11 +1012,11 @@ internal class RPCPatches
     [HarmonyPatch(typeof(PunManager), nameof(PunManager.SyncHaul))]
     internal static class SyncHaul
     {
-        public static bool Prefix(int value, ref PhotonMessageInfo info)
+        public static bool Prefix(int value, ref PhotonMessageInfo _info)
         {
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call SyncHaul with a value of ({value})" +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call SyncHaul with a value of ({value})" +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
@@ -1028,11 +1028,11 @@ internal class RPCPatches
     [HarmonyPatch(typeof(PunManager), nameof(PunManager.UpgradeItemBatteryRPC))]
     internal static class UpgradeItemBattery
     {
-        public static bool Prefix(string itemName, int value, ref PhotonMessageInfo info)
+        public static bool Prefix(string itemName, int value, ref PhotonMessageInfo _info)
         {
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call UpgradeItemBatteryRPC " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call UpgradeItemBatteryRPC " +
                     $"with item name of ({itemName}) and a value of ({value}) " +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
@@ -1045,11 +1045,11 @@ internal class RPCPatches
     [HarmonyPatch(typeof(PunManager), nameof(PunManager.UpgradePlayerEnergyRPC))]
     internal static class UpgradePlayerEnergy
     {
-        public static bool Prefix(int value, ref PhotonMessageInfo info)
+        public static bool Prefix(int value, ref PhotonMessageInfo _info)
         {
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call UpgradePlayerEnergyRPC with a value of ({value}) " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call UpgradePlayerEnergyRPC with a value of ({value}) " +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
@@ -1061,11 +1061,11 @@ internal class RPCPatches
     [HarmonyPatch(typeof(PunManager), nameof(PunManager.UpgradePlayerExtraJumpRPC))]
     internal static class UpgradePlayerExtraJump
     {
-        public static bool Prefix(int value, ref PhotonMessageInfo info)
+        public static bool Prefix(int value, ref PhotonMessageInfo _info)
         {
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call UpgradePlayerExtraJumpRPC with a value of ({value}) " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call UpgradePlayerExtraJumpRPC with a value of ({value}) " +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
@@ -1109,11 +1109,11 @@ internal class RPCPatches
     [HarmonyPatch(typeof(PunManager), nameof(PunManager.UpgradePlayerHealthRPC))]
     internal static class UpgradePlayerHealth
     {
-        public static bool Prefix(int value, ref PhotonMessageInfo info)
+        public static bool Prefix(int value, ref PhotonMessageInfo _info)
         {
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call UpgradePlayerHealthRPC with a value of ({value}) " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call UpgradePlayerHealthRPC with a value of ({value}) " +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
@@ -1215,16 +1215,16 @@ internal class RPCPatches
     [HarmonyPatch(typeof(TruckScreenText), nameof(TruckScreenText.GotoPageRPC))]
     internal static class GotoPage
     {
-        public static bool Prefix(ref PhotonMessageInfo info)
+        public static bool Prefix(ref PhotonMessageInfo _info)
         {
-            if (info.Sender == null)
+            if (_info.Sender == null)
             {
                 return true;
             }
 
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call GotoPageRPC " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call GotoPageRPC " +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
@@ -1236,16 +1236,16 @@ internal class RPCPatches
     [HarmonyPatch(typeof(StaticGrabObject), nameof(StaticGrabObject.DestroyPhysGrabObjectRPC))]
     internal static class StaticGrabObject_DestroyPhysGrabObject
     {
-        public static bool Prefix(ref PhotonMessageInfo info)
+        public static bool Prefix(ref PhotonMessageInfo _info)
         {
-            if (info.Sender == null)
+            if (_info.Sender == null)
             {
                 return true;
             }
 
-            if (info.Sender != PhotonNetwork.MasterClient)
+            if (_info.Sender != PhotonNetwork.MasterClient)
             {
-                Log.LogInfo($"Player ({info.Sender}) tried to call StaticGrabObject.DestroyPhysGrabObjectRPC " +
+                Log.LogInfo($"Player ({_info.Sender}) tried to call StaticGrabObject.DestroyPhysGrabObjectRPC " +
                     $"while not the master client ({PhotonNetwork.MasterClient}).");
                 return false;
             }
