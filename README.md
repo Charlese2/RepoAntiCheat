@@ -16,14 +16,7 @@ This also won't protect you if the host is cheating.
 | Remove text tags from username and chat | Covering entire screen with bright colors |
 | Limit chat message length to vanilla limit (50) | Highly annoying |
 | Limit username length to steam name limit (32) | Highly annoying |
-| `PlayerAvatar.OutroStartRPC` | Softlocked in a permanent loading screen |
-| `PlayerAvatar.SpawnRPC` | Teleporting another player |
-| `PlayerAvater.PlayerDeathRPC` | Killing another player |
-| `PlayerHealth.UpdateHealthRPC` | Modifying health of another player |
 | `PlayerHealth.HurtOtherRPC` | Hurting / killing players |
-| `ExtractionPoint.HaulGoalSetRPC` | Changing goal amount |
-| `ExtractionPoint.ExtractionPointSurplusRPC` | Completing extraction / giving money |
-| `RoundDirector.ExtractionCompletedAllRPC` | Shake Screen repeatedly |
 
 ## Issues
 - Please report any issues you have with the mod to the [Github Page](https://github.com/Charlese2/RepoAntiCheat/issues)
