@@ -32,29 +32,5 @@ namespace RepoAntiCheat.Patches
                 return matcher.InstructionEnumeration();
             }
         }
-
-        [HarmonyWrapSafe]
-        [HarmonyPatch(typeof(ReloadScene), nameof(ReloadScene.Update))]
-        internal static class FixPlayersReadyComparison
-        {
-            [HarmonyTranspiler]
-            public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-            {
-                CodeMatcher matcher = new CodeMatcher(instructions)
-                    .MatchForward(true,
-                    new CodeMatch(instruction => instruction.LoadsField(AccessTools.Field(typeof(ReloadScene), "PlayersReady"))),
-                    new CodeMatch(instruction => instruction.Calls(AccessTools.Method(typeof(PhotonNetwork), "get_CurrentRoom"))),
-                    new CodeMatch(instruction => instruction.Calls(AccessTools.Method(typeof(Room), "get_PlayerCount"))),
-                    new CodeMatch(instruction => instruction.opcode == OpCodes.Bne_Un)
-                    );
-
-                if (!matcher.ReportFailure(MethodBase.GetCurrentMethod(), AntiCheatPlugin.Log.LogInfo))
-                {
-                    matcher.Instruction.opcode = OpCodes.Blt;
-                }
-
-                return matcher.InstructionEnumeration();
-            }
-        }
     }
 }
