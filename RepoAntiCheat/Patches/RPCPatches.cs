@@ -114,6 +114,56 @@ internal class RPCPatches
     //    }
     //}
 
+    [HarmonyPatch(typeof(PlayerAvatar), nameof(PlayerAvatar.ChatMessageSendRPC))]
+    internal static class ChatMesageSend
+    {
+        public static bool Prefix(PlayerAvatar __instance, ref string _message, ref PhotonMessageInfo _info)
+        {
+            if (__instance.photonView.Owner != _info.Sender)
+            {
+                Log.LogInfo($"ChatMessage ({_message}) owner ({_info.photonView.Owner}) does not match sender ({_info.Sender}).");
+                return false;
+            }
+
+            string sanitizedChatMessage;
+            sanitizedChatMessage = Regex.Replace(_message, @"<(\S+?)>", "");
+
+            if (sanitizedChatMessage.Length > 50)
+            {
+                sanitizedChatMessage = sanitizedChatMessage[..50];
+            }
+
+            if (string.IsNullOrWhiteSpace(sanitizedChatMessage))
+            {
+                Log.LogInfo($"{_info.Sender} Chat message was empty. Original Message: ({_message})");
+                return false;
+            }
+
+            _message = sanitizedChatMessage;
+
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerAvatar), nameof(PlayerAvatar.AddToStatsManagerRPC))]
+    internal static class AddToStatsManager
+    {
+        public static bool Prefix(PlayerAvatar __instance, ref string _playerName)
+        {
+            string sanitizedName;
+            sanitizedName = Regex.Replace(_playerName, @"<(\S+?)>", "");
+
+            if (sanitizedName.Length > 32)
+            {
+                sanitizedName = sanitizedName[..32];
+            }
+
+            _playerName = sanitizedName;
+
+            return true;
+        }
+    }
+
     [HarmonyPatch(typeof(PlayerHealth), nameof(PlayerHealth.HurtOtherRPC))]
     internal static class HurtOther
     {
