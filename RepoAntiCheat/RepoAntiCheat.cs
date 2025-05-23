@@ -65,6 +65,8 @@ public class AntiCheatPlugin : BaseUnityPlugin
     {
         Harmony ??= new Harmony(MyPluginInfo.PLUGIN_GUID);
 
+        Log.LogInfo(LoaderMessages.GetMessage());
+
         Log.LogDebug("Patching...");
 
         Harmony.PatchAll();
