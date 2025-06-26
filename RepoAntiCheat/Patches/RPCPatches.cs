@@ -119,12 +119,6 @@ internal class RPCPatches
     {
         public static bool Prefix(PlayerAvatar __instance, ref string _message, ref PhotonMessageInfo _info)
         {
-            if (__instance.photonView.Owner != _info.Sender)
-            {
-                Log.LogInfo($"ChatMessage ({_message}) owner ({_info.photonView.Owner}) does not match sender ({_info.Sender}).");
-                return false;
-            }
-
             string sanitizedChatMessage;
             sanitizedChatMessage = Regex.Replace(_message, @"<(\S+?)>", "");
 
@@ -159,24 +153,6 @@ internal class RPCPatches
             }
 
             _playerName = sanitizedName;
-
-            return true;
-        }
-    }
-
-    [HarmonyPatch(typeof(PlayerHealth), nameof(PlayerHealth.HurtOtherRPC))]
-    internal static class HurtOther
-    {
-        public static bool Prefix(PlayerHealth __instance, int damage, ref PhotonMessageInfo _info)
-        {
-            PlayerAvatar? sendingPlayer = GetPlayerAvatarFromActorNumber(_info.Sender.ActorNumber);
-
-            if (sendingPlayer != null && Vector3.Distance(sendingPlayer.transform.position, __instance.transform.position) > 2f)
-            {
-                Log.LogInfo($"{_info.Sender} sent HurtOtherRPC with damage ({damage}) from too far away " +
-                    $"({Vector3.Distance(sendingPlayer.transform.position, __instance.transform.position)}).");
-                return false;
-            }
 
             return true;
         }
@@ -244,22 +220,6 @@ internal class RPCPatches
     //        return true;
     //    }
     //}
-
-    [HarmonyPatch(typeof(LevelGenerator), nameof(LevelGenerator.ItemSetup))]
-    internal static class ItemSetup
-    {
-        public static bool Prefix()
-        {
-            if (itemSetupOnCooldown)
-            {
-                return false;
-            }
-
-            Instance.StartCoroutine(ItemSetupCooldown());
-
-            return true;
-        }
-    }
 
     [HarmonyPatch(typeof(ValuableObject), nameof(ValuableObject.DiscoverRPC))]
     internal static class Discover

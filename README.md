@@ -16,7 +16,6 @@ This also won't protect you if the host is cheating.
 | Remove text tags from username and chat | Covering entire screen with bright colors |
 | Limit chat message length to vanilla limit (50) | Highly annoying |
 | Limit username length to steam name limit (32) | Highly annoying |
-| `PlayerHealth.HurtOtherRPC` | Hurting / killing players |
 
 ## Issues
 - Please report any issues you have with the mod to the [Github Page](https://github.com/Charlese2/RepoAntiCheat/issues)

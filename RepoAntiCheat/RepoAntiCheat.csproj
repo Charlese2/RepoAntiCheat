@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <!-- BepInEx Properties -->
     <PropertyGroup>
@@ -11,7 +11,7 @@
         <ProjectDepsFileName>$(MSBuildProjectName).deps.json</ProjectDepsFileName>
         <TargetName>$(MSBuildProjectName)</TargetName>
         <!-- Change to whatever version you're currently on. -->
-        <Version>1.0.5</Version>
+        <Version>1.0.6</Version>
     </PropertyGroup>
 
     <!-- Project Properties -->
